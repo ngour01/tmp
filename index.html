@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Message</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient-animation 15s ease infinite;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        @keyframes gradient-animation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        #message {
+            font-size: 5em;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            transition: all 1s ease-in-out;
+            text-align: center;
+        }
+
+        /* Message styles with animations */
+        .style-1 {
+            font-family: 'Pacifico', cursive;
+            animation: pulse 2s infinite ease-in-out;
+        }
+        
+        .style-2 {
+            font-family: 'Times New Roman', serif;
+            animation: slideInFromLeft 1s forwards;
+        }
+
+        .style-3 {
+            font-family: 'Courier New', monospace;
+            letter-spacing: 5px;
+            animation: bounceIn 1.5s forwards;
+        }
+
+        .style-4 {
+            font-family: 'Georgia', serif;
+            color: #ffeb3b;
+            animation: rotateIn 1.5s forwards;
+        }
+
+        .style-5 {
+            font-family: 'Verdana', sans-serif;
+            color: #8bc34a;
+            animation: fadeInAndScale 2s forwards;
+        }
+
+        .style-6 {
+            font-family: 'Comic Sans MS', cursive;
+            color: #e91e63;
+            animation: swing 2s infinite;
+        }
+        
+        .style-7 {
+            font-family: 'Impact', sans-serif;
+            color: #00bcd4;
+            letter-spacing: 2px;
+            animation: floating 3s infinite ease-in-out;
+        }
+        
+        /* Common animation class to show the message */
+        .show {
+            opacity: 1;
+        }
+
+        /* Keyframe animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes slideInFromLeft {
+            0% { transform: translateX(-100%); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0.1); opacity: 0; }
+            60% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes rotateIn {
+            0% { transform: rotate(-360deg) scale(0); opacity: 0; }
+            100% { transform: rotate(0deg) scale(1); opacity: 1; }
+        }
+
+        @keyframes fadeInAndScale {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes swing {
+            20% { transform: rotate(15deg); }
+            40% { transform: rotate(-10deg); }
+            60% { transform: rotate(5deg); }
+            80% { transform: rotate(-5deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="message">I love you Arjun</div>
+
+    <script>
+        const messageElement = document.getElementById('message');
+        const styles = ['style-1', 'style-2', 'style-3', 'style-4', 'style-5', 'style-6', 'style-7'];
+        let currentIndex = 0;
+
+        function changeStyle() {
+            messageElement.className = '';
+            
+            setTimeout(() => {
+                messageElement.classList.add(styles[currentIndex], 'show');
+                currentIndex = (currentIndex + 1) % styles.length;
+            }, 50);
+        }
+
+        document.addEventListener('DOMContentLoaded', changeStyle);
+        
+        setInterval(changeStyle, 3000);
+    </script>
+</body>
+</html>
