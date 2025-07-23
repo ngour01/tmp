@@ -6,6 +6,8 @@
     <title>My Cutie Pie 🥰</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tone.js CDN for sound effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
     <style>
         /* Custom styles for a more playful look */
         body {
@@ -159,6 +161,55 @@
             75% { transform: translateY(-150px) rotate(-45deg) translateX(10px); opacity: 0.4; }
             100% { transform: translateY(-200px) rotate(-45deg) translateX(0); opacity: 0; }
         }
+
+        /* Background floating stars */
+        .star {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: rgba(255, 255, 0, 0.7); /* Yellow star */
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            animation: float-star 15s infinite ease-in-out, twinkle 2s infinite alternate;
+            z-index: 1;
+        }
+
+        @keyframes float-star {
+            0% { transform: translateY(0) translateX(0); opacity: 1; }
+            25% { transform: translateY(-70px) translateX(30px); opacity: 0.9; }
+            50% { transform: translateY(-140px) translateX(-40px); opacity: 0.7; }
+            75% { transform: translateY(-210px) translateX(20px); opacity: 0.5; }
+            100% { transform: translateY(-280px) translateX(0); opacity: 0; }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        /* Sparkle burst effect */
+        .sparkle-particle {
+            position: absolute;
+            background-color: #ffd700; /* Gold color */
+            border-radius: 50%;
+            opacity: 0;
+            animation: sparkle-burst 0.8s forwards;
+            z-index: 20; /* Above everything else */
+        }
+
+        @keyframes sparkle-burst {
+            0% {
+                transform: translate(0, 0) scale(0);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(var(--dx), var(--dy)) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--dx), var(--dy)) scale(0);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -167,7 +218,7 @@
             Click the button to get a sweet message! 😊
         </div>
         <button id="generateBtn" class="generate-button">
-            <span class="button-icon">✨</span> Click Me!
+            <span class="button-icon">✨</span> Give Me Cuteness!
         </button>
     </div>
 
@@ -182,6 +233,14 @@
     <div class="heart" style="left: 50%; top: 60%;"></div>
     <div class="heart" style="left: 75%; top: 95%;"></div>
     <div class="heart" style="left: 5%; top: 90%;"></div>
+
+    <!-- Background floating stars -->
+    <div class="star" style="left: 20%; top: 5%;"></div>
+    <div class="star" style="left: 80%; top: 15%;"></div>
+    <div class="star" style="left: 50%; top: 80%;"></div>
+    <div class="star" style="left: 10%; top: 95%;"></div>
+    <div class="star" style="left: 95%; top: 50%;"></div>
+    <div class="star" style="left: 30%; top: 60%;"></div>
 
 
     <script>
@@ -203,14 +262,77 @@
             "My sunshine on a cloudy day! 🌧️➡️☀️",
             "You're my happy place! 🏡😊",
             "Seriously, you're just the cutest! Stop it! (No, don't stop!) 😂",
-            "Every moment with you is a blessing! 💎"
+            "Every moment with you is a blessing! 💎",
+            "My life's puzzle piece, you complete me! �",
+            "If I had a star for every time you brightened my day, I'd have a galaxy! 🌌",
+            "I'm not saying I'm obsessed, but my thoughts are 99% you! 😉",
+            "You're the secret ingredient to my happiness! 🧪😊"
         ];
 
         const messageDisplay = document.getElementById('messageDisplay');
         const generateBtn = document.getElementById('generateBtn');
 
+        // Initialize Tone.js Synth
+        let synth;
+        // Function to start audio context on user gesture
+        async function initializeAudio() {
+            if (Tone.context.state !== 'running') {
+                await Tone.start();
+                synth = new Tone.Synth().toDestination();
+            }
+        }
+
+        // Add event listener to body to initialize audio context on first click
+        document.body.addEventListener('click', initializeAudio, { once: true });
+
+
+        // Function to create and animate sparkle particles
+        function createSparkleBurst(x, y) {
+            const numParticles = 15;
+            for (let i = 0; i < numParticles; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.classList.add('sparkle-particle');
+                document.body.appendChild(sparkle);
+
+                // Random size for particles
+                const size = Math.random() * 8 + 4; // 4 to 12px
+                sparkle.style.width = `${size}px`;
+                sparkle.style.height = `${size}px`;
+
+                // Initial position at the center of the message container
+                const rect = messageDisplay.getBoundingClientRect();
+                const startX = rect.left + rect.width / 2;
+                const startY = rect.top + rect.height / 2;
+                sparkle.style.left = `${startX}px`;
+                sparkle.style.top = `${startY}px`;
+
+                // Random direction and distance
+                const angle = Math.random() * 2 * Math.PI;
+                const distance = Math.random() * 80 + 30; // 30 to 110px
+                const dx = Math.cos(angle) * distance;
+                const dy = Math.sin(angle) * distance;
+
+                sparkle.style.setProperty('--dx', `${dx}px`);
+                sparkle.style.setProperty('--dy', `${dy}px`);
+
+                // Remove particle after animation
+                sparkle.addEventListener('animationend', () => {
+                    sparkle.remove();
+                });
+            }
+        }
+
+
         // Function to display a random message with animation
         function displayRandomMessage() {
+            // Play a sound
+            if (synth) {
+                synth.triggerAttackRelease("C5", "8n"); // Play a C5 note for an 8th note duration
+            }
+
+            // Create sparkle burst effect
+            createSparkleBurst(); // No need for specific coordinates, it will center on messageDisplay
+
             // Add fade-out animation
             messageDisplay.style.animation = 'fadeOut 0.3s ease-out forwards';
 
@@ -236,4 +358,3 @@
     </script>
 </body>
 </html>
-
