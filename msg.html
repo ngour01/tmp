@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Cutie Pie 🥰</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for a more playful look */
+        body {
+            font-family: 'Inter', sans-serif; /* Using Inter font */
+            background: linear-gradient(135deg, #fce38a, #f38181); /* Cheerful gradient background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden; /* Hide overflow for subtle animations */
+            position: relative; /* Needed for absolute positioning of background elements */
+        }
+        .message-container {
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white */
+            border-radius: 2rem; /* More rounded corners */
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); /* Deeper shadow */
+            text-align: center;
+            max-width: 90%;
+            width: 500px;
+            position: relative;
+            animation: bounceIn 1s ease-out; /* Entry animation */
+            z-index: 10; /* Ensure container is above background elements */
+        }
+        .message-text {
+            font-size: 2.25rem; /* Larger font size */
+            font-weight: 700; /* Bolder */
+            color: #e84a5f; /* A vibrant red/pink color */
+            margin-bottom: 2rem;
+            line-height: 1.3;
+            min-height: 100px; /* Ensure consistent height */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out; /* Smooth transition for message change */
+        }
+        .generate-button {
+            background: linear-gradient(45deg, #a8e063, #56ab2f); /* Green gradient button */
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 9999px; /* Pill-shaped button */
+            font-size: 1.25rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            display: inline-flex; /* To align icon and text */
+            align-items: center;
+            gap: 0.5rem; /* Space between icon and text */
+        }
+        .generate-button:hover {
+            transform: translateY(-5px) scale(1.05); /* Lift and grow on hover */
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+        }
+        .generate-button:active {
+            transform: translateY(0);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Keyframe animations */
+        @keyframes bounceIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            60% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .button-icon {
+            animation: pulse 1.5s infinite ease-in-out; /* Pulsing animation for the icon */
+        }
+
+        /* Background floating hearts */
+        .heart {
+            position: absolute;
+            background-color: rgba(255, 105, 180, 0.6); /* Pink heart */
+            width: 20px;
+            height: 20px;
+            transform: rotate(-45deg);
+            animation: float 10s infinite ease-in-out;
+            z-index: 1; /* Below the main content */
+            border-radius: 50% 0 50% 0; /* Creates heart shape */
+        }
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: rgba(255, 105, 180, 0.6);
+            border-radius: 50%;
+        }
+        .heart::before {
+            top: -10px;
+            left: 0;
+        }
+        .heart::after {
+            top: 0;
+            left: 10px;
+        }
+
+        /* Different heart sizes and animation delays for variety */
+        .heart:nth-child(2) {
+            width: 15px; height: 15px; background-color: rgba(255, 200, 220, 0.7); animation-delay: 2s; animation-duration: 12s;
+            left: 10%; top: 20%;
+        }
+        .heart:nth-child(2)::before, .heart:nth-child(2)::after { width: 15px; height: 15px; background-color: rgba(255, 200, 220, 0.7); }
+        .heart:nth-child(2)::before { top: -7.5px; left: 0; }
+        .heart:nth-child(2)::after { top: 0; left: 7.5px; }
+
+        .heart:nth-child(3) {
+            width: 25px; height: 25px; background-color: rgba(255, 105, 180, 0.5); animation-delay: 4s; animation-duration: 9s;
+            left: 80%; top: 50%;
+        }
+        .heart:nth-child(3)::before, .heart:nth-child(3)::after { width: 25px; height: 25px; background-color: rgba(255, 105, 180, 0.5); }
+        .heart:nth-child(3)::before { top: -12.5px; left: 0; }
+        .heart:nth-child(3)::after { top: 0; left: 12.5px; }
+
+        .heart:nth-child(4) {
+            width: 18px; height: 18px; background-color: rgba(255, 200, 220, 0.6); animation-delay: 6s; animation-duration: 11s;
+            left: 30%; top: 90%;
+        }
+        .heart:nth-child(4)::before, .heart:nth-child(4)::after { width: 18px; height: 18px; background-color: rgba(255, 200, 220, 0.6); }
+        .heart:nth-child(4)::before { top: -9px; left: 0; }
+        .heart:nth-child(4)::after { top: 0; left: 9px; }
+
+        .heart:nth-child(5) {
+            width: 22px; height: 22px; background-color: rgba(255, 105, 180, 0.7); animation-delay: 8s; animation-duration: 13s;
+            left: 60%; top: 10%;
+        }
+        .heart:nth-child(5)::before, .heart:nth-child(5)::after { width: 22px; height: 22px; background-color: rgba(255, 105, 180, 0.7); }
+        .heart:nth-child(5)::before { top: -11px; left: 0; }
+        .heart:nth-child(5)::after { top: 0; left: 11px; }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(-45deg) translateX(0); opacity: 1; }
+            25% { transform: translateY(-50px) rotate(-45deg) translateX(20px); opacity: 0.8; }
+            50% { transform: translateY(-100px) rotate(-45deg) translateX(-20px); opacity: 0.6; }
+            75% { transform: translateY(-150px) rotate(-45deg) translateX(10px); opacity: 0.4; }
+            100% { transform: translateY(-200px) rotate(-45deg) translateX(0); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="message-container">
+        <div id="messageDisplay" class="message-text">
+            Click the button to get a sweet message! 😊
+        </div>
+        <button id="generateBtn" class="generate-button">
+            <span class="button-icon">✨</span> Click Me!
+        </button>
+    </div>
+
+    <!-- Background floating hearts -->
+    <div class="heart" style="left: 15%; top: 70%;"></div>
+    <div class="heart" style="left: 70%; top: 30%;"></div>
+    <div class="heart" style="left: 40%; top: 10%;"></div>
+    <div class="heart" style="left: 5%; top: 40%;"></div>
+    <div class="heart" style="left: 90%; top: 80%;"></div>
+    <div class="heart" style="left: 25%; top: 0%;"></div>
+    <div class="heart" style="left: 85%; top: 10%;"></div>
+    <div class="heart" style="left: 50%; top: 60%;"></div>
+    <div class="heart" style="left: 75%; top: 95%;"></div>
+    <div class="heart" style="left: 5%; top: 90%;"></div>
+
+
+    <script>
+        // Array of cute and funny messages
+        const messages = [
+            "You are my cutie pie! 🥧💖",
+            "I love you, cutie! You are mine 🥰",
+            "You are mine, and I am so lucky ❤️",
+            "I will be with you always, cutie! Forever and ever! 💫",
+            "Don't worry, everything will be alright, my love! I am here for you! 🤗",
+            "You make my heart happy! 💃🕺",
+            "Just thinking about you makes me smile! 😊",
+            "You're sweeter than all the sweets in the world! 🍬🍭",
+            "My day is instantly better with you in it! ☀️",
+            "You're my favorite man! 🫘❤️",
+            "Sending you a big virtual hug! 🤗",
+            "You're the sprinkles on my cupcake! 🧁✨",
+            "You're so cute, it's unfair! 😍",
+            "My sunshine on a cloudy day! 🌧️➡️☀️",
+            "You're my happy place! 🏡😊",
+            "Seriously, you're just the cutest! Stop it! (No, don't stop!) 😂",
+            "Every moment with you is a blessing! 💎"
+        ];
+
+        const messageDisplay = document.getElementById('messageDisplay');
+        const generateBtn = document.getElementById('generateBtn');
+
+        // Function to display a random message with animation
+        function displayRandomMessage() {
+            // Add fade-out animation
+            messageDisplay.style.animation = 'fadeOut 0.3s ease-out forwards';
+
+            setTimeout(() => {
+                // Pick a random message
+                const randomIndex = Math.floor(Math.random() * messages.length);
+                messageDisplay.textContent = messages[randomIndex];
+
+                // Remove fade-out and add fade-in animation
+                messageDisplay.style.animation = 'none'; // Reset animation
+                void messageDisplay.offsetWidth; // Trigger reflow
+                messageDisplay.style.animation = 'fadeIn 0.5s ease-out forwards';
+            }, 300); // Wait for fade-out to complete
+        }
+
+        // Event listener for the button
+        generateBtn.addEventListener('click', displayRandomMessage);
+
+        // Display an initial message when the page loads
+        window.onload = function() {
+            displayRandomMessage();
+        };
+    </script>
+</body>
+</html>
+
